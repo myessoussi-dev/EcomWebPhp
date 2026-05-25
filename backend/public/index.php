@@ -9,7 +9,7 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 $routeFound = false;
 
 require_once __DIR__ . "/../routes/auth.php";
-require_once __DIR__ . "/../routes/api.php";
+require_once __DIR__ . "/../routes/protected.php";
 
 if (!$routeFound) {
 
