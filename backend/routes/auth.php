@@ -5,19 +5,18 @@ require_once __DIR__ . "/../controller/AuthController.php";
 $controller = new AuthController();
 
 $method = $_SERVER["REQUEST_METHOD"];
-$uri = $_SERVER["REQUEST_URI"];
+$uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 
-if ($method === "POST" && str_contains($uri, "/signup")) {
+if ($method === "POST" && $uri === "/signup") {
 
+    $routeFound = true;
     $controller->signup();
 
-} elseif ($method === "POST" && str_contains($uri, "/login")) {
+}
 
+if ($method === "POST" && $uri === "/login") {
+
+    $routeFound = true;
     $controller->login();
 
-} else {
-
-    echo json_encode([
-        "message" => "Route not found"
-    ]);
 }
