@@ -4,12 +4,11 @@ require_once __DIR__ . "/../config/database.php";
 
 class UserDAO {
 
-    private $conn;
+    private ?PDO $conn;
 
     public function __construct() {
 
-        $database = new Database();
-        $this->conn = $database->connect();
+        $this->conn = Database::getInstance();
     }
 
     public function createUser($user): bool
