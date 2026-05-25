@@ -12,7 +12,8 @@ class UserDAO {
         $this->conn = $database->connect();
     }
 
-    public function createUser($user) {
+    public function createUser($user): bool
+    {
 
         $sql = "INSERT INTO users(username, email, YOUR_DB_PASSWORD)
                 VALUES(:username, :email, :YOUR_DB_PASSWORD)";

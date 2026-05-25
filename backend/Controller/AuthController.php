@@ -4,16 +4,20 @@ require_once __DIR__ . "/../service/AuthService.php";
 
 class AuthController {
 
-    private $authService;
+    private AuthService $authService;
 
     public function __construct() {
 
         $this->authService = new AuthService();
     }
 
-    public function signup() {
+    public function signup(): void
+    {
 
-        $data = json_decode(file_get_contents("php://input"), true);
+        $data = json_decode(
+            file_get_contents("php://input"),
+            true
+        );
 
         $success = $this->authService->signup(
             $data["username"],
@@ -26,24 +30,24 @@ class AuthController {
         ]);
     }
 
-    public function login() {
+    public function login(): void
+    {
 
-        $data = json_decode(file_get_contents("php://input"), true);
+        $data = json_decode(
+            file_get_contents("php://input"),
+            true
+        );
 
-        $user = $this->authService->login(
+        $token = $this->authService->login(
             $data["email"],
             $data["YOUR_DB_PASSWORD"]
         );
 
-        if ($user) {
-
-            session_start();
-
-            $_SESSION["user_id"] = $user["id"];
+        if ($token) {
 
             echo json_encode([
                 "success" => true,
-                "message" => "Login successful"
+                "token" => $token
             ]);
 
         } else {
