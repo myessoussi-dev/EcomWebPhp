@@ -1,0 +1,16 @@
+#composer require firebase/php-jwt run it in backend folder or composer install
+#php -S localhost:8000 -t public
+#create mysql db for users and insert values
+#php 8.0+
+backend/
+│
+├── config/              # Configuration files (DB, JWT)
+├── controller/          # HTTP request handlers
+├── dao/                 # Database access layer
+├── entity/              # Data models
+├── middleware/          # JWT verification
+├── routes/              # API routes
+├── service/             # Business logic
+├── public/              # Entry point (index.php)
+├── vendor/              # Composer dependencies
+├── composer.json
