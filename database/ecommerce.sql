@@ -4,6 +4,7 @@ CREATE DATABASE IF NOT EXISTS ecommerce_store
 
 USE ecommerce_store;
 
+DROP TABLE IF EXISTS invoice;
 DROP TABLE IF EXISTS order_item;
 DROP TABLE IF EXISTS customer_order;
 DROP TABLE IF EXISTS product;
@@ -58,6 +59,18 @@ CREATE TABLE order_item (
   CONSTRAINT fk_item_product
     FOREIGN KEY (product_id)
     REFERENCES product(id)
+);
+
+CREATE TABLE invoice (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT NOT NULL UNIQUE,
+  file_name VARCHAR(180) NOT NULL,
+  file_path VARCHAR(255) NOT NULL,
+  generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_invoice_order
+    FOREIGN KEY (order_id)
+    REFERENCES customer_order(id)
+    ON DELETE CASCADE
 );
 
 INSERT INTO product (name, category, description, price, stock, image_color) VALUES

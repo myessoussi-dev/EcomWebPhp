@@ -11,6 +11,21 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.navbar .container,
+.nav-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.navbar .container {
+  justify-content: space-between;
+}
+
+.nav-actions .btn {
+  white-space: nowrap;
+}
+
 .shop-hero {
   background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 52%, #ecfeff 100%);
   border-bottom: 1px solid var(--line);
@@ -135,6 +150,55 @@ body {
   gap: 10px;
 }
 
+.history-section {
+  background: var(--soft);
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.history-layout {
+  align-items: end;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr minmax(280px, 460px);
+}
+
+.history-form {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr auto;
+}
+
+.orders-history {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.order-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.order-card-header {
+  align-items: start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.order-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.order-items {
+  margin: 14px 0 0;
+  padding-left: 18px;
+}
+
 @media (max-width: 768px) {
   .shop-hero {
     padding: 48px 0 36px;
@@ -142,5 +206,15 @@ body {
 
   .shop-hero h1 {
     font-size: 2.2rem;
+  }
+
+  .nav-actions .btn {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .history-layout,
+  .history-form {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,11 +1,28 @@
 const PRODUCTS_API = "../../backend/api/products.php";
 const CHECKOUT_API = "../../backend/api/checkout.php";
+const ORDERS_API = "../../backend/api/orders.php";
+const INVOICE_API = "../../backend/api/invoice.php";
 
 let products = [];
 let cart = JSON.parse(localStorage.getItem("shop_cart") || "[]");
 
 function money(value) {
   return `${Number(value).toFixed(2)} DT`;
+}
+
+function readJsonResponse(res, fallbackMessage) {
+  const contentType = res.headers.get("Content-Type") || "";
+
+  if (!contentType.includes("application/json")) {
+    return res.text().then(() => {
+      throw new Error(fallbackMessage);
+    });
+  }
+
+  return res.json().then((data) => {
+    if (!res.ok) throw new Error(data.error || fallbackMessage);
+    return data;
+  });
 }
 
 function saveCart() {
@@ -173,10 +190,7 @@ document.getElementById("checkout-form").addEventListener("submit", (event) => {
     body: JSON.stringify(payload)
   })
     .then((res) => {
-      return res.json().then((data) => {
-        if (!res.ok) throw new Error(data.error || "Commande refusee");
-        return data;
-      });
+      return readJsonResponse(res, "Commande refusee");
     })
     .then((data) => {
       message.className = "mt-3 mb-0 text-success";
@@ -186,6 +200,133 @@ document.getElementById("checkout-form").addEventListener("submit", (event) => {
     .catch((error) => {
       message.className = "mt-3 mb-0 text-danger";
       message.innerText = error.message || "Impossible de confirmer la commande.";
+    });
+});
+
+document.getElementById("history-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const email = String(formData.get("email") || "").trim();
+  loadOrderHistory(email);
+});
+
+function renderOrderHistory(orders, email) {
+  const container = document.getElementById("orders-history");
+  const message = document.getElementById("history-message");
+
+  if (!orders.length) {
+    message.className = "mt-3 text-muted";
+    message.innerText = "Aucune commande trouvee pour cet email.";
+    container.innerHTML = "";
+    return;
+  }
+
+  message.className = "mt-3 text-success";
+  message.innerText = `${orders.length} commande(s) trouvee(s).`;
+  container.innerHTML = orders.map((order) => {
+    const canDownloadInvoice = order.payment_status === "paid";
+    const items = order.items.map((item) => {
+      return `<li>${item.product_name} - ${item.quantity} x ${money(item.unit_price)}</li>`;
+    }).join("");
+    const invoiceButton = canDownloadInvoice
+      ? `<button class="btn btn-outline-dark btn-sm d-block mt-2 w-100" type="button" data-invoice-id="${order.id}" data-invoice-email="${email}">
+          Facture PDF
+        </button>`
+      : `<button class="btn btn-outline-secondary btn-sm d-block mt-2" type="button" disabled>
+          Facture disponible apres paiement
+        </button>`;
+
+    return `
+      <article class="order-card">
+        <div class="order-card-header">
+          <div>
+            <h3 class="h6 mb-1">Commande #${order.id}</h3>
+            <div class="order-meta">${order.created_at}</div>
+            <div class="order-meta">Paiement: ${order.payment_status}</div>
+          </div>
+          <div class="text-end">
+            <strong>${money(order.total)}</strong>
+            ${invoiceButton}
+          </div>
+        </div>
+        <ul class="order-items">${items}</ul>
+      </article>
+    `;
+  }).join("");
+}
+
+function loadOrderHistory(email) {
+  const message = document.getElementById("history-message");
+
+  message.className = "mt-3 text-muted";
+  message.innerText = "Chargement de l'historique...";
+
+  fetch(`${ORDERS_API}?email=${encodeURIComponent(email)}`)
+    .then((res) => {
+      return readJsonResponse(res, "Historique indisponible");
+    })
+    .then((data) => renderOrderHistory(data.orders || [], email))
+    .catch((error) => {
+      message.className = "mt-3 text-danger";
+      message.innerText = error.message || "Impossible de charger l'historique.";
+      document.getElementById("orders-history").innerHTML = "";
+    });
+}
+
+document.addEventListener("click", (event) => {
+  const invoiceButton = event.target.closest("[data-invoice-id]");
+  if (!invoiceButton) return;
+
+  const originalText = invoiceButton.innerText;
+  const pdfWindow = window.open("", "_blank");
+
+  if (pdfWindow) {
+    pdfWindow.document.write("<p>Generation de la facture...</p>");
+    pdfWindow.document.close();
+  }
+
+  invoiceButton.disabled = true;
+  invoiceButton.innerText = "Generation...";
+
+  fetch(INVOICE_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      order_id: Number(invoiceButton.dataset.invoiceId),
+      email: invoiceButton.dataset.invoiceEmail
+    })
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return readJsonResponse(res, "Facture indisponible");
+      }
+
+      return res.blob();
+    })
+    .then((blob) => {
+      const pdfUrl = URL.createObjectURL(blob);
+
+      if (pdfWindow) {
+        pdfWindow.location.href = pdfUrl;
+      } else {
+        const link = document.createElement("a");
+        link.href = pdfUrl;
+        link.download = `facture-${invoiceButton.dataset.invoiceId}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+
+      setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
+    })
+    .catch((error) => {
+      if (pdfWindow) pdfWindow.close();
+      alert(error.message || "Impossible de generer la facture.");
+    })
+    .finally(() => {
+      invoiceButton.disabled = false;
+      invoiceButton.innerText = originalText;
     });
 });
 

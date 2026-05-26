@@ -1,3 +1,5 @@
 .env
 node_modules/
 *.log
+backend/storage/invoices/*.pdf
+!backend/storage/invoices/.gitkeep
