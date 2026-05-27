@@ -1,5 +1,9 @@
 <?php
 
+namespace EcomWebPhp\Backend\Config;
+
+use PDO;
+use PDOException;
 
 class Database
 {
@@ -17,7 +21,7 @@ class Database
         try {
 
             self::$pdo = new PDO(
-                "mysql:host=" .self::$host. ";dbname=" .self::$dbName .";charset=utf8",
+                "mysql:host=" . self::$host . ";dbname=" . self::$dbName . ";charset=utf8",
                 self::$username,
                 self::$YOUR_DB_PASSWORD
             );
@@ -30,7 +34,7 @@ class Database
             die("Database connection failed: " . $e->getMessage());
         }
     }
-    public static function getInstance()
+    public static function getInstance(): PDO
     {
         if (self::$pdo === null) {
             self::connect();
