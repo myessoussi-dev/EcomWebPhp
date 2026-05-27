@@ -1,7 +1,9 @@
 <?php
 namespace EcomWebPhp\Backend\DAO;
 
-use EcomWebPhp\Backend\Config\Database;
+
+
+use Database;
 use EcomWebPhp\Backend\Entity\Product;
 use PDO;
 

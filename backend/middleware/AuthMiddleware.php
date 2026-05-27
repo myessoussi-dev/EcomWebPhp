@@ -36,7 +36,7 @@ class AuthMiddleware {
             $decoded = JWT::decode(
                 $token,
                 new Key(
-                    JwtConfig::$SECRET_KEY,
+                    JwtConfig::getSecret(),
                     "HS256"
                 )
             );
