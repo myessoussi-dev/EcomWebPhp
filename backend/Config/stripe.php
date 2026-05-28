@@ -1,5 +1,6 @@
 <?php
 
+// Load .env variables into the process environment
 $envPath = __DIR__ . "/../../.env";
 
 if (file_exists($envPath)) {
@@ -21,11 +22,11 @@ if (file_exists($envPath)) {
     }
 }
 
-$appUrl = rtrim(getenv('APP_URL') ?: 'http://127.0.0.1:8022', '/');
+$appUrl = rtrim(getenv('APP_URL') ?: 'http://localhost:5173', '/');
 
 $stripeConfig = [
     'secret_key' => getenv('STRIPE_SECRET_KEY') ?: '',
     'currency' => getenv('STRIPE_CURRENCY') ?: 'eur',
-    'success_url' => $appUrl . '/frontend/pages/payment-success.html?session_id={CHECKOUT_SESSION_ID}',
-    'cancel_url' => $appUrl . '/frontend/pages/payment-cancel.html'
+    'success_url' => $appUrl . '/payment-success?session_id={CHECKOUT_SESSION_ID}',
+    'cancel_url' => $appUrl . '/payment-cancel'
 ];

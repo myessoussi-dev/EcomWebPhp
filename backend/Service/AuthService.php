@@ -55,7 +55,7 @@ class AuthService {
 
         $jwt = JWT::encode(
             $payload,
-            JwtConfig::$SECRET_KEY,
+            JwtConfig::getSecret(),
             "HS256"
         );
 

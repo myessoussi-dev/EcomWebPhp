@@ -1,23 +1,24 @@
 <?php
 
 require_once(__DIR__ . "/../core/Response.php");
-require_once(__DIR__ . "/../dao/OrderDAO.php");
-require_once(__DIR__ . "/../dao/ProductDAO.php");
-require_once(__DIR__ . "/../dao/UserDAO.php");
-require_once(__DIR__ . "/../models/CustomerOrder.php");
-require_once(__DIR__ . "/../models/OrderItem.php");
-require_once(__DIR__ . "/../models/User.php");
-require_once(__DIR__ . "/../services/StripePaymentService.php");
+require_once(__DIR__ . "/../DAO/OrderDAO.php");
+require_once(__DIR__ . "/../DAO/EcommerceProductDAO.php");
+require_once(__DIR__ . "/../DAO/EcommerceUserDAO.php");
+require_once(__DIR__ . "/../Entity/CustomerOrder.php");
+require_once(__DIR__ . "/../Entity/OrderItem.php");
+require_once(__DIR__ . "/../Entity/EcommerceUser.php");
+require_once(__DIR__ . "/../Service/StripePaymentService.php");
+require_once(__DIR__ . "/../middleware/AuthMiddleware.php");
 
 class CheckoutController
 {
     private PDO $pdo;
     private OrderDAO $orderDAO;
-    private ProductDAO $productDAO;
-    private UserDAO $userDAO;
+    private EcommerceProductDAO $productDAO;
+    private EcommerceUserDAO $userDAO;
     private StripePaymentService $paymentService;
 
-    public function __construct(PDO $pdo, OrderDAO $orderDAO, ProductDAO $productDAO, UserDAO $userDAO, StripePaymentService $paymentService)
+    public function __construct(PDO $pdo, OrderDAO $orderDAO, EcommerceProductDAO $productDAO, EcommerceUserDAO $userDAO, StripePaymentService $paymentService)
     {
         $this->pdo = $pdo;
         $this->orderDAO = $orderDAO;
@@ -33,25 +34,31 @@ class CheckoutController
             return;
         }
 
+        // Enforce Authentication: user must be logged in to order
+        $decoded = AuthMiddleware::authenticate();
+        $userId = (int) $decoded->id;
+        $email = $decoded->email;
+
         $payload = json_decode(file_get_contents('php://input'), true) ?: [];
         $customer = $payload['customer'] ?? [];
         $items = $payload['items'] ?? [];
 
-        $fullName = trim($customer['full_name'] ?? '');
-        $email = trim($customer['email'] ?? '');
+        $fullName = trim($customer['full_name'] ?? $decoded->username ?? '');
         $phone = trim($customer['phone'] ?? '');
         $address = trim($customer['address'] ?? '');
 
-        if (!$this->isValidCheckout($fullName, $email, $address, $items)) {
-            Response::json(["error" => "Customer information and cart items are required"], 422);
+        if ($phone === '' || $address === '' || empty($items)) {
+            Response::json(["error" => "Phone, address and cart items are required"], 422);
             return;
         }
 
         try {
             $this->pdo->beginTransaction();
 
-            $user = new User(null, $fullName, $email, $phone, $address);
-            $userId = $this->userDAO->save($user);
+            // Update user profile info directly in the unified users table
+            $stmt = $this->pdo->prepare("UPDATE users SET phone = ?, address = ? WHERE id = ?");
+            $stmt->execute([$phone, $address, $userId]);
+
             [$orderItems, $total] = $this->prepareOrderItems($items);
             $orderId = $this->orderDAO->create(new CustomerOrder(null, $userId, $total));
 
@@ -80,7 +87,7 @@ class CheckoutController
                 return;
             }
 
-            Response::json(["error" => "Unable to confirm order"], 400);
+            Response::json(["error" => "Unable to confirm order: " . $e->getMessage()], 400);
         }
     }
 

@@ -21,6 +21,8 @@ import RegisterPage from './pages/RegisterPage.jsx'
 import SearchResultsPage from './pages/SearchResultsPage.jsx'
 import ShopPage from './pages/ShopPage.jsx'
 import WishlistPage from './pages/WishlistPage.jsx'
+import PaymentSuccessPage from './pages/PaymentSuccessPage.jsx'
+import PaymentCancelPage from './pages/PaymentCancelPage.jsx'
 
 export default function App() {
   return (
@@ -33,6 +35,8 @@ export default function App() {
         <Route path="search" element={<SearchResultsPage />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<CheckoutPage />} />
+        <Route path="payment-success" element={<PaymentSuccessPage />} />
+        <Route path="payment-cancel" element={<PaymentCancelPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="forgot-YOUR_DB_PASSWORD" element={<ForgotPasswordPage />} />

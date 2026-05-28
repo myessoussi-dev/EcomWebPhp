@@ -1,6 +1,6 @@
 <?php
 
-class Product implements JsonSerializable
+class EcommerceProduct implements JsonSerializable
 {
     private ?int $id;
     private string $name;

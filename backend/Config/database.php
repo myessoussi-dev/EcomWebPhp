@@ -10,6 +10,26 @@ class Database
             return self::$pdo;
         }
 
+        // Load .env variables if not already loaded in the environment
+        if (getenv('DB_NAME') === false) {
+            $envPath = __DIR__ . "/../../.env";
+            if (file_exists($envPath)) {
+                foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+                    $line = trim($line);
+                    if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+                        continue;
+                    }
+                    [$key, $value] = explode('=', $line, 2);
+                    $key = trim($key);
+                    $value = trim($value, " \t\n\r\0\x0B\"'");
+                    if (getenv($key) === false) {
+                        putenv($key . '=' . $value);
+                        $_ENV[$key] = $value;
+                    }
+                }
+            }
+        }
+
         $config = self::loadConfig();
         self::validateConfig($config);
 
@@ -54,7 +74,7 @@ class Database
 
     private static function validateConfig(array $config): void
     {
-        $required = ['dbname', 'username', 'YOUR_DB_PASSWORD'];
+        $required = ['dbname', 'username'];
 
         foreach ($required as $key) {
             if (empty($config[$key])) {

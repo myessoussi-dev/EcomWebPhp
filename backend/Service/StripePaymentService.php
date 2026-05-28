@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . "/../models/OrderItem.php");
+require_once(__DIR__ . "/../Entity/OrderItem.php");
 
 class StripePaymentService
 {
@@ -19,6 +19,17 @@ class StripePaymentService
 
     public function createCheckoutSession(int $orderId, string $customerEmail, array $items): array
     {
+        if ($this->secretKey === '') {
+            $mockSessionId = 'mock_session_' . bin2hex(random_bytes(16));
+            $successUrl = $this->successUrl !== '' 
+                ? str_replace('{CHECKOUT_SESSION_ID}', $mockSessionId, $this->successUrl)
+                : 'http://localhost:5173/payment-success?session_id=' . $mockSessionId;
+            return [
+                'id' => $mockSessionId,
+                'url' => $successUrl
+            ];
+        }
+
         $this->ensureConfigured();
 
         $payload = [
@@ -37,6 +48,13 @@ class StripePaymentService
 
     public function retrieveCheckoutSession(string $sessionId): array
     {
+        if (str_starts_with($sessionId, 'mock_session_')) {
+            return [
+                'payment_status' => 'paid',
+                'payment_intent' => 'mock_intent_' . bin2hex(random_bytes(16))
+            ];
+        }
+
         $this->ensureConfigured();
 
         return $this->request('GET', 'https://api.stripe.com/v1/checkout/sessions/' . rawurlencode($sessionId));

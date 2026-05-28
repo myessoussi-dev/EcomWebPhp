@@ -1,9 +1,12 @@
 <?php
-require_once(__DIR__ . "/../ecommerce/core/Cors.php");
+require_once(__DIR__ . "/../core/Cors.php");
 allowCors();
 
-require_once(__DIR__ . "/../ecommerce/config/db.php");
-require_once(__DIR__ . "/../ecommerce/controllers/OrderController.php");
+require_once(__DIR__ . "/../Config/db.php");
+require_once(__DIR__ . "/../Controller/OrderController.php");
+require_once(__DIR__ . "/../DAO/InvoiceDAO.php");
+require_once(__DIR__ . "/../DAO/OrderDAO.php");
+require_once(__DIR__ . "/../Service/InvoicePdfService.php");
 
 $controller = new OrderController(
     new OrderDAO($pdo),

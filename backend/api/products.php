@@ -1,9 +1,9 @@
 <?php
-require_once(__DIR__ . "/../ecommerce/core/Cors.php");
+require_once(__DIR__ . "/../core/Cors.php");
 allowCors();
 
-require_once(__DIR__ . "/../ecommerce/config/db.php");
-require_once(__DIR__ . "/../ecommerce/controllers/ProductController.php");
+require_once(__DIR__ . "/../Config/db.php");
+require_once(__DIR__ . "/../Controller/EcommerceProductController.php");
 
-$controller = new ProductController(new ProductDAO($pdo));
+$controller = new EcommerceProductController(new EcommerceProductDAO($pdo));
 $controller->index();

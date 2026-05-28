@@ -1,16 +1,16 @@
 <?php
-require_once(__DIR__ . "/../ecommerce/core/Cors.php");
+require_once(__DIR__ . "/../core/Cors.php");
 allowCors();
 
-require_once(__DIR__ . "/../ecommerce/config/db.php");
-require_once(__DIR__ . "/../ecommerce/config/stripe.php");
-require_once(__DIR__ . "/../ecommerce/controllers/CheckoutController.php");
+require_once(__DIR__ . "/../Config/db.php");
+require_once(__DIR__ . "/../Config/stripe.php");
+require_once(__DIR__ . "/../Controller/CheckoutController.php");
 
 $controller = new CheckoutController(
     $pdo,
     new OrderDAO($pdo),
-    new ProductDAO($pdo),
-    new UserDAO($pdo),
+    new EcommerceProductDAO($pdo),
+    new EcommerceUserDAO($pdo),
     new StripePaymentService($stripeConfig)
 );
 $controller->store();

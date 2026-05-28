@@ -1,8 +1,8 @@
 <?php
 
-require_once(__DIR__ . "/../models/Product.php");
+require_once(__DIR__ . "/../Entity/EcommerceProduct.php");
 
-class ProductDAO
+class EcommerceProductDAO
 {
     private PDO $pdo;
 
@@ -19,10 +19,10 @@ class ProductDAO
             ORDER BY id"
             );
 
-        return array_map(fn(array $row) => Product::fromArray($row), $stmt->fetchAll());
+        return array_map(fn(array $row) => EcommerceProduct::fromArray($row), $stmt->fetchAll());
     }
 
-    public function findForUpdate(int $id): ?Product
+    public function findForUpdate(int $id): ?EcommerceProduct
     {
         $stmt = $this->pdo->prepare("
             SELECT id, name, price, stock
@@ -33,7 +33,7 @@ class ProductDAO
         $stmt->execute([$id]);
         $product = $stmt->fetch();
 
-        return $product ? Product::fromArray($product) : null;
+        return $product ? EcommerceProduct::fromArray($product) : null;
     }
 
     public function decreaseStock(int $id, int $quantity): void

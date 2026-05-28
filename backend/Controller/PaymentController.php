@@ -1,18 +1,18 @@
 <?php
 
 require_once(__DIR__ . "/../core/Response.php");
-require_once(__DIR__ . "/../dao/OrderDAO.php");
-require_once(__DIR__ . "/../dao/ProductDAO.php");
-require_once(__DIR__ . "/../services/StripePaymentService.php");
+require_once(__DIR__ . "/../DAO/OrderDAO.php");
+require_once(__DIR__ . "/../DAO/EcommerceProductDAO.php");
+require_once(__DIR__ . "/../Service/StripePaymentService.php");
 
 class PaymentController
 {
     private PDO $pdo;
     private OrderDAO $orderDAO;
-    private ProductDAO $productDAO;
+    private EcommerceProductDAO $productDAO;
     private StripePaymentService $paymentService;
 
-    public function __construct(PDO $pdo, OrderDAO $orderDAO, ProductDAO $productDAO, StripePaymentService $paymentService)
+    public function __construct(PDO $pdo, OrderDAO $orderDAO, EcommerceProductDAO $productDAO, StripePaymentService $paymentService)
     {
         $this->pdo = $pdo;
         $this->orderDAO = $orderDAO;
@@ -70,7 +70,7 @@ class PaymentController
                 $this->pdo->rollBack();
             }
 
-            Response::json(["error" => "Unable to confirm payment"], 400);
+            Response::json(["error" => "Unable to confirm payment: " . $e->getMessage()], 400);
         }
     }
 }

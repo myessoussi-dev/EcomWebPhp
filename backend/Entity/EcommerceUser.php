@@ -1,6 +1,6 @@
 <?php
 
-class User
+class EcommerceUser
 {
     private ?int $id;
     private string $fullName;

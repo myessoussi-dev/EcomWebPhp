@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . "/../models/CustomerOrder.php");
-require_once(__DIR__ . "/../models/OrderItem.php");
+require_once(__DIR__ . "/../Entity/CustomerOrder.php");
+require_once(__DIR__ . "/../Entity/OrderItem.php");
 
 class OrderDAO
 {
@@ -78,7 +78,7 @@ class OrderDAO
         $stmt = $this->pdo->prepare("
             SELECT co.id, co.total, co.status, co.payment_status, co.created_at, co.paid_at
             FROM customer_order co
-            INNER JOIN user u ON u.id = co.user_id
+            INNER JOIN users u ON u.id = co.user_id
             WHERE u.email = ?
             ORDER BY co.created_at DESC
         ");
@@ -118,12 +118,12 @@ class OrderDAO
                 co.payment_status,
                 co.created_at,
                 co.paid_at,
-                u.full_name,
+                u.username AS full_name,
                 u.email,
                 u.phone,
                 u.address
             FROM customer_order co
-            INNER JOIN user u ON u.id = co.user_id
+            INNER JOIN users u ON u.id = co.user_id
             WHERE co.id = ? AND u.email = ?
         ");
         $stmt->execute([$orderId, $email]);

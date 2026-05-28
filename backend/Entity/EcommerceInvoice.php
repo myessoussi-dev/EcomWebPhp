@@ -1,6 +1,6 @@
 <?php
 
-class Invoice
+class EcommerceInvoice
 {
     private ?int $id;
     private int $orderId;

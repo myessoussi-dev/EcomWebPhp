@@ -1,9 +1,9 @@
 <?php
 
 require_once(__DIR__ . "/../core/Response.php");
-require_once(__DIR__ . "/../dao/InvoiceDAO.php");
-require_once(__DIR__ . "/../dao/OrderDAO.php");
-require_once(__DIR__ . "/../services/InvoicePdfService.php");
+require_once(__DIR__ . "/../DAO/InvoiceDAO.php");
+require_once(__DIR__ . "/../DAO/OrderDAO.php");
+require_once(__DIR__ . "/../Service/InvoicePdfService.php");
 
 class OrderController
 {
@@ -70,7 +70,7 @@ class OrderController
             $this->invoicePdfService->save($pdf, $this->invoiceDirectory, $fileName);
             $this->invoiceDAO->saveForOrder($orderId, $fileName, "backend/storage/invoices/" . $fileName);
         } catch (Throwable $e) {
-            Response::json(["error" => "Unable to generate invoice"], 500);
+            Response::json(["error" => "Unable to generate invoice: " . $e->getMessage()], 500);
             return;
         }
 

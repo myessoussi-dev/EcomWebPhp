@@ -75,6 +75,7 @@ export function CartProvider({ children }) {
       clearCart,
       removeFromCart,
       setQuantity,
+      notify,
       shipping,
       subtotal,
       tax,
@@ -83,7 +84,7 @@ export function CartProvider({ children }) {
       total: subtotal + shipping + tax,
       wishlist,
     }
-  }, [addToCart, cart, clearCart, removeFromCart, setQuantity, toasts, toggleWishlist, wishlist])
+  }, [addToCart, cart, clearCart, notify, removeFromCart, setQuantity, toasts, toggleWishlist, wishlist])
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
