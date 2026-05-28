@@ -1,0 +1,5 @@
+import Button from '../components/ui/Button.jsx'
+
+export default function AccountPage() {
+  return <section className="section--tight"><div className="container"><div className="page-hero__inner" style={{ margin: '2rem 0' }}><span className="eyebrow">Account</span><h1 className="section-title">Your profile</h1></div><div className="grid grid--2"><form className="panel form"><h2>Profile details</h2><label className="label">Username<input className="field" defaultValue="demo_customer" /></label><label className="label">Email<input className="field" defaultValue="customer@example.com" type="email" /></label><Button>Save changes</Button></form><div className="panel form"><h2>Preferences</h2><label className="check-row"><span>Email order updates</span><input defaultChecked type="checkbox" /></label><label className="check-row"><span>Product recommendations</span><input defaultChecked type="checkbox" /></label><Button to="/orders" variant="secondary">View orders</Button></div></div></div></section>
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paiement confirme</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <main class="shop-hero min-vh-100 d-flex align-items-center">
+      <div class="container">
+        <p class="eyebrow">Paiement Stripe</p>
+        <h1 id="title">Verification du paiement...</h1>
+        <p class="hero-copy" id="message">Merci de patienter.</p>
+        <a class="btn btn-dark mt-3" href="index.html">Retour boutique</a>
+      </div>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get("session_id");
+      const title = document.getElementById("title");
+      const message = document.getElementById("message");
+
+      if (!sessionId) {
+        title.innerText = "Session manquante";
+        message.innerText = "Impossible de verifier ce paiement.";
+      } else {
+        fetch(`../../backend/api/payment_success.php?session_id=${encodeURIComponent(sessionId)}`)
+          .then((res) => {
+            if (!res.ok) throw new Error("Payment not confirmed");
+            return res.json();
+          })
+          .then((data) => {
+            localStorage.removeItem("shop_cart");
+            title.innerText = "Paiement confirme";
+            message.innerText = `Commande #${data.order_id} confirmee.`;
+          })
+          .catch(() => {
+            title.innerText = "Paiement non confirme";
+            message.innerText = "La verification du paiement a echoue.";
+          });
+      }
+    </script>
+  </body>
+</html>
