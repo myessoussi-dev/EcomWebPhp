@@ -4,7 +4,7 @@ require_once __DIR__ . "/../Config/database.php";
 
 class UserDAO {
 
-    private ?PDO $conn;
+    protected ?PDO $conn;
 
     public function __construct() {
 

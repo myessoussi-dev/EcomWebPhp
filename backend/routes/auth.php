@@ -11,6 +11,7 @@ if ($method === "POST" && $uri === "/signup") {
 
     $routeFound = true;
     $controller->signup();
+    exit();
 
 }
 
@@ -18,5 +19,5 @@ if ($method === "POST" && $uri === "/login") {
 
     $routeFound = true;
     $controller->login();
-
+    exit();
 }

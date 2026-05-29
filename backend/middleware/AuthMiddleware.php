@@ -15,42 +15,30 @@ class AuthMiddleware {
         if (!isset($headers["Authorization"])) {
 
             http_response_code(401);
-
-            echo json_encode([
-                "message" => "Token missing"
-            ]);
-
+            echo json_encode(["message" => "Token missing"]);
             exit;
         }
 
-        $authHeader = $headers["Authorization"];
-
-        $token = str_replace(
-            "Bearer ",
-            "",
-            $authHeader
-        );
+        $token = str_replace("Bearer ", "", $headers["Authorization"]);
 
         try {
-
-            $decoded = JWT::decode(
+            return JWT::decode(
                 $token,
-                new Key(
-                    JwtConfig::getSecret(),
-                    "HS256"
-                )
+                new Key(JwtConfig::getSecret(), "HS256")
             );
+        } catch (Exception $e) {
+            // ignore and try admin
+        }
 
-            return $decoded;
-
-        } catch(Exception $e) {
+        try {
+            return JWT::decode(
+                $token,
+                new Key(JwtConfig::getAdminSecret(), "HS256")
+            );
+        } catch (Exception $e) {
 
             http_response_code(401);
-
-            echo json_encode([
-                "message" => "Invalid token"
-            ]);
-
+            echo json_encode(["message" => "Invalid token"]);
             exit;
         }
     }

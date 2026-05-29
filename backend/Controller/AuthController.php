@@ -40,10 +40,7 @@ class AuthController {
 
     public function login(): void
     {
-        $data = json_decode(
-            file_get_contents("php://input"),
-            true
-        );
+        $data = json_decode(file_get_contents("php://input"), true);
 
         if (!is_array($data) || empty($data["email"]) || empty($data["YOUR_DB_PASSWORD"])) {
             http_response_code(422);
@@ -54,17 +51,21 @@ class AuthController {
             return;
         }
 
-        $token = $this->authService->login(
+        $result = $this->authService->login(
             $data["email"],
             $data["YOUR_DB_PASSWORD"]
         );
 
-        if ($token) {
+        if ($result) {
+
             echo json_encode([
                 "success" => true,
-                "token" => $token
+                "token" => $result["token"],
+                "is_admin" => $result["is_admin"]
             ]);
+
         } else {
+
             http_response_code(401);
             echo json_encode([
                 "success" => false,

@@ -1,7 +1,7 @@
 <?php
 
 // Load .env variables into the process environment
-$envPath = __DIR__ . "/../../.env";
+$envPath = __DIR__ . "/../.env";
 
 if (file_exists($envPath)) {
     foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {

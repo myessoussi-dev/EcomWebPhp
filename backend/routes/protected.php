@@ -11,5 +11,5 @@ if ($method === "GET" && $uri === "/protected") {
 
     $routeFound = true;
     $protectedController->index();
-
+    exit();
 }

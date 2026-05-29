@@ -58,13 +58,26 @@ class AuthService {
             "iat" => time(),
             "exp" => time() + (60 * 60)
         ];
+        if (!empty($user["is_admin"])) {
 
-        $jwt = JWT::encode(
-            $payload,
-            JwtConfig::getSecret(),
-            "HS256"
-        );
+            $token = JWT::encode(
+                $payload,
+                JwtConfig::getAdminSecret(),
+                "HS256"
+            );
 
-        return $jwt;
+        } else {
+
+            $token = JWT::encode(
+                $payload,
+                JwtConfig::getSecret(),
+                "HS256"
+            );
+        }
+
+        return [
+            "token" => $token,
+            "is_admin" => (bool)$user["is_admin"]
+        ];
     }
 }

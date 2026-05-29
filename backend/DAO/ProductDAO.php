@@ -30,7 +30,6 @@ class ProductDAO
   {
     $statement = $this->db->query("select * from products");
     $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
-    $products = [];
     return array_map(fn($row) => $this->mapToProduct($row), $rows);
 
   }
@@ -39,7 +38,7 @@ class ProductDAO
     $statement = $this->db->prepare("select * from products where id = :id");
     $statement->execute(['id' => $id]);
     $row = $statement->fetch(PDO::FETCH_ASSOC);
-    if ($row == false) {
+    if (!$row) {
       return null;
     } else {
       return $this->mapToProduct($row);
@@ -57,7 +56,7 @@ class ProductDAO
     $row = $statement->fetch(PDO::FETCH_ASSOC);
     return $row !== false;
   }
-  public function save(Product $product)
+  public function save(Product $product): void
   {
     $statement = $this->db->prepare(
       "insert into products(name, price, stock, category_id, img_url) 
