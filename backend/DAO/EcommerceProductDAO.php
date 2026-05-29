@@ -27,8 +27,7 @@ class EcommerceProductDAO
         $stmt = $this->pdo->prepare("
             SELECT id, name, price, stock
             FROM product
-            WHERE id = ?
-            FOR UPDATE"
+            WHERE id = ? FOR UPDATE"
             );
         $stmt->execute([$id]);
         $product = $stmt->fetch();
@@ -41,8 +40,12 @@ class EcommerceProductDAO
         $stmt = $this->pdo->prepare("
             UPDATE product
             SET stock = stock - ?
-            WHERE id = ?"
+            WHERE id = ? AND stock >= ?"
             );
-        $stmt->execute([$quantity, $id]);
+        $stmt->execute([$quantity, $id, $quantity]);
+
+        if ($stmt->rowCount() === 0) {
+            throw new RuntimeException("Unable to decrease stock");
+        }
     }
 }

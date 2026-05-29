@@ -26,7 +26,6 @@ if ($method === "POST" && ($uri === "/checkout" || $uri === "/checkout.php" || s
         $pdo,
         new OrderDAO($pdo),
         new EcommerceProductDAO($pdo),
-        new EcommerceUserDAO($pdo),
         new StripePaymentService($stripeConfig)
     );
     $controller->store();

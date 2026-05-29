@@ -10,7 +10,6 @@ $controller = new CheckoutController(
     $pdo,
     new OrderDAO($pdo),
     new EcommerceProductDAO($pdo),
-    new EcommerceUserDAO($pdo),
     new StripePaymentService($stripeConfig)
 );
 $controller->store();

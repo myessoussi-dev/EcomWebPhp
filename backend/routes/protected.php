@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../controller/ProtectedController.php";
+require_once __DIR__ . "/../Controller/ProtectedController.php";
 
 $protectedController = new ProtectedController();
 

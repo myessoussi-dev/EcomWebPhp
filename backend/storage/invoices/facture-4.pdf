@@ -12,28 +12,32 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 5 0 obj
-<< /Length 874 >>
+<< /Length 1029 >>
 stream
 BT /F1 20 Tf 50 790 Td (Facture #4) Tj ET
 BT /F1 11 Tf 50 760 Td (ShopNow) Tj ET
-BT /F1 10 Tf 50 742 Td (Date commande: 2026-05-26 21:42:57) Tj ET
+BT /F1 10 Tf 50 742 Td (Date commande: 2026-05-28 20:39:07) Tj ET
 BT /F1 10 Tf 50 724 Td (Statut paiement: paid) Tj ET
 BT /F1 12 Tf 50 690 Td (Client) Tj ET
-BT /F1 10 Tf 50 670 Td (Nom: ikfeou) Tj ET
-BT /F1 10 Tf 50 652 Td (Email: aa@dj.c) Tj ET
-BT /F1 10 Tf 50 634 Td (Telephone: 9419849) Tj ET
-BT /F1 10 Tf 50 616 Td (Adresse: ziuzoue) Tj ET
+BT /F1 10 Tf 50 670 Td (Nom: aa) Tj ET
+BT /F1 10 Tf 50 652 Td (Email: aa@bb.bb) Tj ET
+BT /F1 10 Tf 50 634 Td (Telephone: 56265) Tj ET
+BT /F1 10 Tf 50 616 Td (Adresse: giygi) Tj ET
 BT /F1 12 Tf 50 580 Td (Produits) Tj ET
 BT /F1 10 Tf 50 558 Td (Produit) Tj ET
 BT /F1 10 Tf 320 558 Td (Qte) Tj ET
 BT /F1 10 Tf 370 558 Td (Prix) Tj ET
 BT /F1 10 Tf 450 558 Td (Total) Tj ET
-BT /F1 10 Tf 50 535 Td (Clavier Mecanique K90) Tj ET
+BT /F1 10 Tf 50 535 Td (Sac Urbain 24L) Tj ET
 BT /F1 10 Tf 320 535 Td (1) Tj ET
-BT /F1 10 Tf 370 535 Td (129.00 DT) Tj ET
-BT /F1 10 Tf 450 535 Td (129.00 DT) Tj ET
-BT /F1 12 Tf 370 495 Td (Total facture) Tj ET
-BT /F1 12 Tf 450 495 Td (129.00 DT) Tj ET
+BT /F1 10 Tf 370 535 Td (69.00 DT) Tj ET
+BT /F1 10 Tf 450 535 Td (69.00 DT) Tj ET
+BT /F1 10 Tf 50 515 Td (Clavier Mecanique K90) Tj ET
+BT /F1 10 Tf 320 515 Td (2) Tj ET
+BT /F1 10 Tf 370 515 Td (129.00 DT) Tj ET
+BT /F1 10 Tf 450 515 Td (258.00 DT) Tj ET
+BT /F1 12 Tf 370 475 Td (Total facture) Tj ET
+BT /F1 12 Tf 450 475 Td (327.00 DT) Tj ET
 endstream
 endobj
 xref
@@ -47,5 +51,5 @@ xref
 trailer
 << /Size 6 /Root 1 0 R >>
 startxref
-1235
+1391
 %%EOF

@@ -3,10 +3,8 @@
 require_once(__DIR__ . "/../core/Response.php");
 require_once(__DIR__ . "/../DAO/OrderDAO.php");
 require_once(__DIR__ . "/../DAO/EcommerceProductDAO.php");
-require_once(__DIR__ . "/../DAO/EcommerceUserDAO.php");
 require_once(__DIR__ . "/../Entity/CustomerOrder.php");
 require_once(__DIR__ . "/../Entity/OrderItem.php");
-require_once(__DIR__ . "/../Entity/EcommerceUser.php");
 require_once(__DIR__ . "/../Service/StripePaymentService.php");
 require_once(__DIR__ . "/../middleware/AuthMiddleware.php");
 
@@ -15,15 +13,13 @@ class CheckoutController
     private PDO $pdo;
     private OrderDAO $orderDAO;
     private EcommerceProductDAO $productDAO;
-    private EcommerceUserDAO $userDAO;
     private StripePaymentService $paymentService;
 
-    public function __construct(PDO $pdo, OrderDAO $orderDAO, EcommerceProductDAO $productDAO, EcommerceUserDAO $userDAO, StripePaymentService $paymentService)
+    public function __construct(PDO $pdo, OrderDAO $orderDAO, EcommerceProductDAO $productDAO, StripePaymentService $paymentService)
     {
         $this->pdo = $pdo;
         $this->orderDAO = $orderDAO;
         $this->productDAO = $productDAO;
-        $this->userDAO = $userDAO;
         $this->paymentService = $paymentService;
     }
 

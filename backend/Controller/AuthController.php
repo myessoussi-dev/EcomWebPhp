@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../service/AuthService.php";
+require_once __DIR__ . "/../Service/AuthService.php";
 
 class AuthController {
 
@@ -13,11 +13,19 @@ class AuthController {
 
     public function signup(): void
     {
-
         $data = json_decode(
             file_get_contents("php://input"),
             true
         );
+
+        if (!is_array($data) || empty($data["username"]) || empty($data["email"]) || empty($data["YOUR_DB_PASSWORD"])) {
+            http_response_code(422);
+            echo json_encode([
+                "success" => false,
+                "message" => "Username, email and YOUR_DB_PASSWORD are required"
+            ]);
+            return;
+        }
 
         $success = $this->authService->signup(
             $data["username"],
@@ -32,11 +40,19 @@ class AuthController {
 
     public function login(): void
     {
-
         $data = json_decode(
             file_get_contents("php://input"),
             true
         );
+
+        if (!is_array($data) || empty($data["email"]) || empty($data["YOUR_DB_PASSWORD"])) {
+            http_response_code(422);
+            echo json_encode([
+                "success" => false,
+                "message" => "Email and YOUR_DB_PASSWORD are required"
+            ]);
+            return;
+        }
 
         $token = $this->authService->login(
             $data["email"],
@@ -44,14 +60,12 @@ class AuthController {
         );
 
         if ($token) {
-
             echo json_encode([
                 "success" => true,
                 "token" => $token
             ]);
-
         } else {
-
+            http_response_code(401);
             echo json_encode([
                 "success" => false,
                 "message" => "Invalid credentials"

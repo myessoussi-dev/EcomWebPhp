@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . "/../dao/UserDAO.php";
-require_once __DIR__ . "/../entity/User.php";
-require_once __DIR__ . "/../config/JwtConfig.php";
+require_once __DIR__ . "/../DAO/UserDAO.php";
+require_once __DIR__ . "/../Entity/User.php";
+require_once __DIR__ . "/../Config/JwtConfig.php";
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use Firebase\JWT\JWT;
@@ -34,6 +34,12 @@ class AuthService {
     }
 
     public function login($email, $YOUR_DB_PASSWORD) {
+        $email = trim((string) $email);
+        $YOUR_DB_PASSWORD = (string) $YOUR_DB_PASSWORD;
+
+        if ($email === '' || $YOUR_DB_PASSWORD === '') {
+            return false;
+        }
 
         $user = $this->userDAO->findByEmail($email);
 

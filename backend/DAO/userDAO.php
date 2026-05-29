@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../config/database.php";
+require_once __DIR__ . "/../Config/database.php";
 
 class UserDAO {
 
@@ -14,15 +14,17 @@ class UserDAO {
     public function createUser($user): bool
     {
 
-        $sql = "INSERT INTO users(username, email, YOUR_DB_PASSWORD)
-                VALUES(:username, :email, :YOUR_DB_PASSWORD)";
+        $sql = "INSERT INTO users(username, email, YOUR_DB_PASSWORD, phone, address)
+                VALUES(:username, :email, :YOUR_DB_PASSWORD, :phone, :address)";
 
         $stmt = $this->conn->prepare($sql);
 
         return $stmt->execute([
             ":username" => $user->username,
             ":email" => $user->email,
-            ":YOUR_DB_PASSWORD" => $user->YOUR_DB_PASSWORD
+            ":YOUR_DB_PASSWORD" => $user->YOUR_DB_PASSWORD,
+            ":phone" => $user->phone,
+            ":address" => $user->address
         ]);
     }
 

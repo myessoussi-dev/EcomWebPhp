@@ -19,7 +19,7 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      await login(email, YOUR_DB_PASSWORD)
+      await login(email.trim(), YOUR_DB_PASSWORD)
       notify('Welcome back! Successfully logged in.')
       navigate('/')
     } catch (err) {
