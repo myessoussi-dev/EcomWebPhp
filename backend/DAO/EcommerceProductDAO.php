@@ -14,7 +14,7 @@ class EcommerceProductDAO
     public function findAll(): array
     {
         $stmt = $this->pdo->query("
-            SELECT id, name, category, description, price, stock, image_color
+            SELECT id, name, category, description, price, stock, image_color, image_url
             FROM product
             ORDER BY id"
             );

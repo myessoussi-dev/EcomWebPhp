@@ -9,7 +9,7 @@ function toCheckoutItem(item) {
 
 export const orderService = {
   async checkout(customer, cart) {
-    return apiRequest('/checkout.php', {
+    return apiRequest('/checkout', {
       method: 'POST',
       body: JSON.stringify({
         customer,
@@ -19,12 +19,12 @@ export const orderService = {
   },
 
   async listByEmail(email) {
-    const data = await apiRequest(`/orders.php?email=${encodeURIComponent(email)}`)
+    const data = await apiRequest(`/orders?email=${encodeURIComponent(email)}`)
     return data.orders || []
   },
 
   async generateInvoice(orderId, email) {
-    return apiBlobRequest('/invoice.php', {
+    return apiBlobRequest('/invoice', {
       method: 'POST',
       body: JSON.stringify({
         order_id: Number(orderId),

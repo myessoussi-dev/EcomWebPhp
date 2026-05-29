@@ -55,7 +55,7 @@ class AuthService {
             "id" => $user["id"],
             "email" => $user["email"],
             "username" => $user["username"],
-            "is_admin" => (bool) $user["is_admin"],
+            "is_admin" => (bool) ($user["is_admin"] ?? 0),
             "iat" => time(),
             "exp" => time() + (60 * 60)
         ];
@@ -78,7 +78,7 @@ class AuthService {
 
         return [
             "token" => $token,
-            "is_admin" => (bool)$user["is_admin"]
+            "is_admin" => (bool) ($user["is_admin"] ?? 0)
         ];
     }
 }

@@ -9,8 +9,9 @@ class EcommerceProduct implements JsonSerializable
     private float $price;
     private int $stock;
     private string $imageColor;
+    private ?string $imageUrl;
 
-    public function __construct(?int $id, string $name, string $category, ?string $description, float $price, int $stock, string $imageColor)
+    public function __construct(?int $id, string $name, string $category, ?string $description, float $price, int $stock, string $imageColor, ?string $imageUrl = null)
     {
         $this->id = $id;
         $this->name = $name;
@@ -19,6 +20,7 @@ class EcommerceProduct implements JsonSerializable
         $this->price = $price;
         $this->stock = $stock;
         $this->imageColor = $imageColor;
+        $this->imageUrl = $imageUrl;
     }
 
     public static function fromArray(array $row): self
@@ -30,7 +32,8 @@ class EcommerceProduct implements JsonSerializable
             $row['description'] ?? null,
             (float) $row['price'],
             (int) $row['stock'],
-            $row['image_color'] ?? '#2563eb'
+            $row['image_color'] ?? '#2563eb',
+            $row['image_url'] ?? null
         );
     }
 
@@ -63,7 +66,9 @@ class EcommerceProduct implements JsonSerializable
             'description' => $this->description,
             'price' => number_format($this->price, 2, '.', ''),
             'stock' => $this->stock,
-            'image_color' => $this->imageColor
+            'image_color' => $this->imageColor,
+            'image' => $this->imageUrl,
+            'imageUrl' => $this->imageUrl
         ];
     }
 }

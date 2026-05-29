@@ -19,7 +19,7 @@ export default function PaymentSuccessPage() {
     }
 
     // Call payment success confirmation API
-    apiRequest(`/payment_success.php?session_id=${encodeURIComponent(sessionId)}`)
+    apiRequest(`/payment-success?session_id=${encodeURIComponent(sessionId)}`)
       .then((data) => {
         clearCart();
         setOrderId(data.order_id);
