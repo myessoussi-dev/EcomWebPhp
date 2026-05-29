@@ -39,4 +39,12 @@ class AdminController {
             "data" => $this->adminDAO->getAllProducts()
         ]);
     }
+
+    public function users($admin): void
+    {
+        echo json_encode([
+            "success" => true,
+            "data" => $this->adminDAO->getAllUsers()
+        ]);
+    }
 }

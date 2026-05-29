@@ -14,7 +14,7 @@ function parseJwt(token) {
         .join('')
     )
     return JSON.parse(jsonPayload)
-  } catch (e) {
+  } catch {
     return null
   }
 }
@@ -43,8 +43,9 @@ export function AuthProvider({ children }) {
       window.localStorage.setItem('ecomwebphp_token', response.token)
       setToken(response.token)
       const payload = parseJwt(response.token)
-      setUser(payload)
-      return { success: true, user: payload }
+      const user = payload ? { ...payload, is_admin: payload.is_admin || response.is_admin } : null
+      setUser(user)
+      return { success: true, user }
     } else {
       throw new Error(response?.message || 'Login failed')
     }

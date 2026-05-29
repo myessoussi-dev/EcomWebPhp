@@ -16,7 +16,9 @@ CREATE TABLE users (
   email VARCHAR(160) NOT NULL UNIQUE,
   YOUR_DB_PASSWORD VARCHAR(255) NOT NULL,
   phone VARCHAR(40) NULL,
-  address TEXT NULL
+  address TEXT NULL,
+  is_admin TINYINT(1) NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE product (
@@ -82,3 +84,6 @@ INSERT INTO product (name, category, description, price, stock, image_color) VAL
 ('Lampe Desk Mini', 'Maison', 'Lampe de bureau LED avec intensite reglable et design minimal.', 39.00, 40, '#0891b2'),
 ('Souris Precision X', 'Informatique', 'Souris ergonomique avec capteur precis et boutons programmables.', 59.00, 27, '#4f46e5'),
 ('Chargeur Rapide 65W', 'Accessoires', 'Chargeur USB-C compact pour telephone, tablette et ordinateur portable.', 45.00, 35, '#0f766e');
+
+INSERT INTO users (username, email, YOUR_DB_PASSWORD, is_admin) VALUES
+('Admin', 'admin@example.com', '$2y$12$nTluU5U57txKY6.6SlnTl.QZTSzjKcFfXnscLI.ILGD3cs05gJrqa', 1);

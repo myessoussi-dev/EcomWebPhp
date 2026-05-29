@@ -19,9 +19,9 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      await login(email.trim(), YOUR_DB_PASSWORD)
+      const result = await login(email.trim(), YOUR_DB_PASSWORD)
       notify('Welcome back! Successfully logged in.')
-      navigate('/')
+      navigate(result.user?.is_admin ? '/admin' : '/')
     } catch (err) {
       setError(err.message || 'Invalid email or YOUR_DB_PASSWORD.')
     } finally {

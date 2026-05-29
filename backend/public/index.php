@@ -48,6 +48,7 @@ if (file_exists($envPath)) {
 
 require_once __DIR__ . "/../routes/auth.php";
 require_once __DIR__ . "/../routes/protected.php";
+require_once __DIR__ . "/../routes/admin.php";
 require_once __DIR__ . "/../routes/ecommerce.php";
 
 if (!$routeFound) {

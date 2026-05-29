@@ -1,12 +1,32 @@
 import AdminLayout from '../../components/admin/AdminLayout.jsx'
 import DataTable from '../../components/admin/DataTable.jsx'
-
-const users = [
-  { id: 1, name: 'Demo Customer', email: 'customer@example.com', role: 'Customer', status: 'Active' },
-  { id: 2, name: 'Store Manager', email: 'manager@example.com', role: 'Admin', status: 'Active' },
-  { id: 3, name: 'Wholesale Buyer', email: 'buyer@example.com', role: 'Customer', status: 'Pending' },
-]
+import { useEffect, useState } from 'react'
+import { adminService } from '../../services/adminService.js'
 
 export default function AdminUsersPage() {
-  return <AdminLayout title="Users management"><DataTable columns={[{ key: 'name', label: 'Name' }, { key: 'email', label: 'Email' }, { key: 'role', label: 'Role' }, { key: 'status', label: 'Status' }]} rows={users} /></AdminLayout>
+  const [users, setUsers] = useState([])
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let active = true
+
+    adminService.users()
+      .then((data) => {
+        if (active) setUsers(data)
+      })
+      .catch((err) => {
+        if (active) setError(err.message || 'Unable to load users.')
+      })
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  return (
+    <AdminLayout title="Users management">
+      {error && <p className="muted">{error}</p>}
+      <DataTable columns={[{ key: 'name', label: 'Name' }, { key: 'email', label: 'Email' }, { key: 'role', label: 'Role' }, { key: 'status', label: 'Status' }]} rows={users} />
+    </AdminLayout>
+  )
 }

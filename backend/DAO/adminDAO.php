@@ -68,4 +68,13 @@ class AdminDAO
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getAllUsers(): array
+    {
+        $sql = "SELECT id, username, email, is_admin FROM users ORDER BY id DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
